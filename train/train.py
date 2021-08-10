@@ -66,29 +66,31 @@ def train(model, train_loader, epochs, optimizer, loss_fn, device):
     loss_fn      - The loss function used for training.
     device       - Where the model and data should be loaded (gpu or cpu).
     """
-   
+    model.train()
     for epoch in range(1, epochs + 1):
-        model.train()
-        total_loss = 0
-        for batch in train_loader:         
-            batch_X, batch_y = batch
-            
-            batch_X = batch_X.to(device)
-            batch_y = batch_y.to(device)
-            
-            predicted = model(batch_X)
-            loss = loss_fn(batch_Y, predicted)
-            # TODO: Complete this train method to train the model provided.
-            loss.backward()
-            
-            optimizer.step()
-            
-            #ptimizer.zero_grad()
-            
-            total_loss += loss.data.item()
-    
-        # TODO: Paste the train() method developed in the notebook here.
-        print("Epoch: {}, BCELoss: {}".format(epoch, total_loss / len(train_loader)))
+        
+            total_loss = 0
+
+            for batch in train_loader:     
+
+                batch_X, batch_y = batch
+
+
+                # zero the parameter gradients
+                optimizer.zero_grad()
+
+                # forward + backward + optimize
+                outputs = model(batch_X)
+
+                loss = loss_fn(outputs, batch_y)
+                loss.backward()
+                optimizer.step()
+
+
+
+
+                total_loss += loss.data.item()
+            print("Epoch: {}, BCELoss: {}".format(epoch, total_loss / len(train_loader)))
   
 
 
@@ -101,7 +103,7 @@ if __name__ == '__main__':
     # Training Parameters
     parser.add_argument('--batch-size', type=int, default=512, metavar='N',
                         help='input batch size for training (default: 512)')
-    parser.add_argument('--epochs', type=int, default=10, metavar='N',
+    parser.add_argument('--epochs', type=int, default=2, metavar='N',
                         help='number of epochs to train (default: 10)')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
