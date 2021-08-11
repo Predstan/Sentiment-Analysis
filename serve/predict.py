@@ -90,6 +90,6 @@ def predict_fn(input_data, model):
     #       be a numpy array which contains a single integer which is either 1 or 0
 
     result = model(data)
-   
-
-    return result.item()
+    result = 0 if result.item()<0.5 else 1
+  
+    return result
